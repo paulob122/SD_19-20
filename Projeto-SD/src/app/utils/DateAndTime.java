@@ -12,11 +12,4 @@ public class DateAndTime {
 
         return formatter.format(date);
     }
-
-    public static long get_seconds_between_dates(Date x, Date y) {
-
-        long seconds = (y.getTime()-x.getTime())/1000;
-
-        return seconds;
-    }
 }

@@ -1,6 +1,6 @@
 
 
-package app.model.content;
+package app.model.content.music;
 
 import app.model.content.properties.MetaData;
 
@@ -16,4 +16,13 @@ public class Music {
         this.metadata = metadata;
     }
 
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("ID: ").append(id).append("\n");
+        sb.append(metadata.toString());
+
+        return sb.toString();
+    }
 }

@@ -1,12 +1,12 @@
 
-
 package app;
 
+import app.model.FileSharingSystem;
 import app.server.Server;
 import app.utils.DateAndTime;
+import app.utils.GeneralMessage;
 
 import java.io.IOException;
-import java.util.Date;
 
 public class ServerApp {
 
@@ -14,28 +14,38 @@ public class ServerApp {
 
     public static void main(String[] args) {
 
-        System.out.println("[app: " + DateAndTime.get_current_time() + "] system app is running...");
+        //--------------------------------------------------------------------------------------------------------------
+
+        FileSharingSystem fss = new FileSharingSystem();
+
+        fss.register_user("zizu", "secretpass1234");
+
+        System.out.println(fss.toString());
+
+        //--------------------------------------------------------------------------------------------------------------
+
+        GeneralMessage.show(0, "app", "system is running", true);
+
         long millis_start = System.currentTimeMillis();
+
+        //--------------------------------------------------------------------------------------------------------------
 
         Server server = null;
 
-        try {
-
-            server = new Server(port);
-
-        } catch (IOException e) {
-
-            System.out.println("\t[Server_Error] Cannot create server socket for port number " + port);
+        try { server = new Server(port, fss); }
+        catch (IOException e) {
+            GeneralMessage.show(0, "app", "cannot create server socket for port number " + port, true);
         }
 
         server.start();
 
+        //--------------------------------------------------------------------------------------------------------------
+
         long millis_finish = System.currentTimeMillis();
-        long seconds = (millis_finish - millis_start) / 1000;
 
-        System.out.println("\t[server: " + DateAndTime.get_current_time() + "] disconnected...");
+        GeneralMessage.show(1, "server", "server session ended", true);
+        GeneralMessage.show(0, "app", "session last " + ((millis_finish - millis_start) / 1000) + " seconds", true);
 
-        System.out.println("[app: "+ DateAndTime.get_current_time() + "] running finished...");
-        System.out.println("\n[session: up for " + seconds + " seconds]");
+        //--------------------------------------------------------------------------------------------------------------
     }
 }

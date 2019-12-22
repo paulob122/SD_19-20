@@ -1,37 +1,68 @@
 package app.server;
 
-import app.utils.DateAndTime;
+import app.model.FileSharingSystem;
+import app.model.users.User;
+import app.utils.GeneralMessage;
 
 import java.io.*;
 import java.net.Socket;
 
 public class ServerWorker implements Runnable {
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    private User user_authenticated;
+
+    //------------------------------------------------------------------------------------------------------------------
+
     private BufferedReader in_reader;
     private PrintWriter out_writer;
     private Socket client_socket;
+    private FileSharingSystem fss_system;
 
-    public ServerWorker(Socket client_socket) throws IOException {
+    //------------------------------------------------------------------------------------------------------------------
+
+    public ServerWorker(Socket client_socket, FileSharingSystem system) throws IOException {
 
         this.in_reader = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
         this.out_writer = new PrintWriter(client_socket.getOutputStream());
 
         this.client_socket = client_socket;
+
+        this.fss_system = system;
+
+        this.user_authenticated = null;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void run() {
 
         try {
 
-            System.out.println("\t\t[worker: " + DateAndTime.get_current_time() + "] initialized...");
+            GeneralMessage.show(2, "worker", "initialized...", false);
 
-            String message_from_client;
+            String message_from_client, message_to_client;
+
             while ((message_from_client = this.in_reader.readLine()) != null) {
 
-                System.out.println("\t\t[worker] client says = " + message_from_client);
+                switch (message_from_client) {
 
-                this.out_writer.println("ok");
+                    case "AUTHENTICATE":
+
+                        authenticate();
+
+                        break;
+
+                    default:
+
+                        break;
+                }
+
+                GeneralMessage.show(2, "worker", "got: " + message_from_client, false);
+
+                this.out_writer.println(message_from_client);
                 this.out_writer.flush();
             }
 
@@ -41,10 +72,32 @@ public class ServerWorker implements Runnable {
 
         } catch (Exception e) {
 
-            System.out.println("\t\t[worker: " + DateAndTime.get_current_time() + "] error closing socket...");
+            GeneralMessage.show(2, "worker", "error closing socket...", true);
         }
 
-        System.out.println("\t\t[worker: " + DateAndTime.get_current_time() + "] stopped...");
-        System.out.println("\t[server: " + DateAndTime.get_current_time() + "] client disconnected...");
+        GeneralMessage.show(2, "worker", "stopped...", false);
+        GeneralMessage.show(1, "server", "client disconnected", true);
+    }
+
+    private void authenticate() throws IOException {
+
+        String command_content = in_reader.readLine();
+
+        String[] parts = command_content.split("\\s+");
+
+        boolean ok = fss_system.authenticate(parts[0], parts[1]);
+
+        if (ok) {
+
+            user_authenticated = fss_system.get_user(parts[0]);
+
+            out_writer.println("welcome " + parts[0] + "!");
+            out_writer.flush();
+
+        } else {
+
+            out_writer.println("credentials are wrong");
+            out_writer.flush();
+        }
     }
 }

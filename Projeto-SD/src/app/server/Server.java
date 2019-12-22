@@ -1,11 +1,10 @@
 package app.server;
 
 
-import app.utils.DateAndTime;
+import app.model.FileSharingSystem;
+import app.utils.GeneralMessage;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,41 +14,49 @@ public class Server {
 
     private int port = 12345;
     private ServerSocket server_socket;
+    private FileSharingSystem system;
 
     //------------------------------------------------------------
 
-    public Server (int port) throws IOException {
+    public Server(int port, FileSharingSystem fss) throws IOException {
 
         this.port = port;
 
         this.server_socket = new ServerSocket(port);
+        this.system = fss;
     }
 
     //------------------------------------------------------------
 
     public boolean start() {
 
-        System.out.println("\t[server: " + DateAndTime.get_current_time() + "] running...");
+        GeneralMessage.show(1, "server", "running...", true);
+
+        //------------------------------------------------------------------------------------
 
         while(true) {
 
             Socket client_socket = null;
 
             try {
+
                 client_socket = server_socket.accept();
-                System.out.println("\t[server: " + DateAndTime.get_current_time() + "] client connected...");
+                GeneralMessage.show(1, "server", "client connected...", true);
+
             }
-            catch (IOException e) { System.out.println("\t[server] client could not connect..."); }
+            catch (IOException e) { GeneralMessage.show(1, "server", "client could not connect", false); }
 
             //------------------------------------------------------------------------------------
 
             ServerWorker sv_worker = null;
 
             try {
-                sv_worker = new ServerWorker(client_socket);
-            } catch (IOException e) {
-                System.out.println("[server] error running server worker...");
-            }
+
+                sv_worker = new ServerWorker(client_socket, this.system);
+
+            } catch (IOException e) { GeneralMessage.show(1, "server", "error running server worker...", false);}
+
+            //------------------------------------------------------------------------------------
 
             new Thread(sv_worker).start();
 

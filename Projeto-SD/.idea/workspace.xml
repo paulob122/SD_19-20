@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0c6daee9-c5bb-420a-be6f-dd34de7991c2" name="Default Changelist" comment="" />
+    <list default="true" id="0c6daee9-c5bb-420a-be6f-dd34de7991c2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/client/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/client/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/ServerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ServerApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/model/content/FileSharingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/FileSharingSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/model/content/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/content/music/Music.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/model/content/properties/MetaData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/content/properties/MetaData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/model/content/properties/Tag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/content/properties/Tag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/server/ServerWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/server/ServerWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/utils/DateAndTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/utils/DateAndTime.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,10 +28,20 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1V6YQDVybEZa7YqQ5AVqhYV0oBI" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Console Font" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -37,7 +60,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="Application.ServerApp">
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="app.client.Client" />
       <module name="Sistemas-Distribuidos-Projeto" />
@@ -66,8 +89,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ServerApp" />
         <item itemvalue="Application.Client" />
+        <item itemvalue="Application.ServerApp" />
       </list>
     </recent_temporary>
   </component>
@@ -83,10 +106,22 @@
       <updated>1576574993047</updated>
       <workItem from="1576574995666" duration="1253000" />
       <workItem from="1576947858517" duration="6752000" />
+      <workItem from="1577023918852" duration="15082000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
