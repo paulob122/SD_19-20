@@ -14,6 +14,7 @@ public class Server {
 
     private int port = 12345;
     private ServerSocket server_socket;
+
     private FileSharingSystem system;
 
     //------------------------------------------------------------
@@ -30,7 +31,7 @@ public class Server {
 
     public boolean start() {
 
-        GeneralMessage.show(1, "server", "running...", true);
+        GeneralMessage.show(1, "server", "running at port " + port + "...", true);
 
         //------------------------------------------------------------------------------------
 
@@ -41,10 +42,9 @@ public class Server {
             try {
 
                 client_socket = server_socket.accept();
-                GeneralMessage.show(1, "server", "client connected...", true);
+                GeneralMessage.show(1, "server", "client (" + client_socket.getRemoteSocketAddress().toString() + ") connected...", true);
 
-            }
-            catch (IOException e) { GeneralMessage.show(1, "server", "client could not connect", false); }
+            } catch (IOException e) { GeneralMessage.show(1, "server", "client could not connect", false); }
 
             //------------------------------------------------------------------------------------
 

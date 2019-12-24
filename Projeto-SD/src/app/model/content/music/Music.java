@@ -16,11 +16,21 @@ public class Music {
         this.metadata = metadata;
     }
 
+    public void add_tag(String tag) {
+
+        this.metadata.add_tag(tag);
+    }
+
+    public boolean hasTag(String tag) {
+
+        return this.metadata.hasTag(tag);
+    }
+
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("ID: ").append(id).append("\n");
+        sb.append("ID: ").append(id).append(", Metadata: ");
         sb.append(metadata.toString());
 
         return sb.toString();

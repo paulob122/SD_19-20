@@ -1,6 +1,10 @@
 package app.model;
 
+import app.model.content.music.Music;
 import app.model.users.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileSharingSystem {
 
@@ -14,15 +18,20 @@ public class FileSharingSystem {
     }
 
 
-    public boolean authenticate(String nome, String pass) {
+    public boolean authenticate(String name, String pass) {
 
         boolean exists = false;
 
-        if (this.users.containsKey(nome)) {
+        if (this.users.containsKey(name)) {
 
             exists = true;
 
-            boolean checks = this.users.check_user_password(nome, pass);
+            boolean checks = this.users.check_user_password(name, pass);
+
+            if (checks) {
+
+                this.users.add_user_authenticated(name);
+            }
 
             return checks;
         }
@@ -55,6 +64,16 @@ public class FileSharingSystem {
         return ok;
     }
 
+    public boolean is_user_in_session(String name) {
+
+        return this.users.is_user_authenticated(name);
+    }
+
+    public boolean logout_user(String name) {
+
+        return this.users.logout_user(name);
+    }
+
     public String toString () {
 
         StringBuilder sb = new StringBuilder();
@@ -63,5 +82,10 @@ public class FileSharingSystem {
         sb.append("\nContent:\n").append(this.content.toString());
 
         return sb.toString();
+    }
+
+    public List<Music> search(String tag) {
+
+        return this.content.filter_tag(tag);
     }
 }

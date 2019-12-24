@@ -4,6 +4,7 @@ package app;
 import app.model.FileSharingSystem;
 import app.server.Server;
 import app.utils.DateAndTime;
+import app.utils.GUI;
 import app.utils.GeneralMessage;
 
 import java.io.IOException;
@@ -16,9 +17,15 @@ public class ServerApp {
 
         //--------------------------------------------------------------------------------------------------------------
 
+        GUI.clear_screen();
+
+        //--------------------------------------------------------------------------------------------------------------
+
         FileSharingSystem fss = new FileSharingSystem();
 
-        fss.register_user("zizu", "secretpass1234");
+        fss.register_user("zizu", "pass");
+        fss.authenticate("zizu",  "pass");
+        fss.logout_user("zizu");
 
         System.out.println(fss.toString());
 
