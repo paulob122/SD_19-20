@@ -3,26 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="0c6daee9-c5bb-420a-be6f-dd34de7991c2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/ServerApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/ServerApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/client/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/client/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/ContentDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/ContentDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/FileSharingSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/FileSharingSystem.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/UsersDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/UsersDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/content/music/Music.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/content/music/Music.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/content/properties/MetaData.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/content/properties/MetaData.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/model/content/properties/Tag.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/server/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/server/Server.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/server/ServerWorker.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/server/ServerWorker.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/utils/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/utils/GUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/utils/Input.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Sistemas-Distribuidos-Projeto/app/utils/Input.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/ServerApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/ServerApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/client/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/model/ContentDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/ContentDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/model/FileSharingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/FileSharingSystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/model/UsersDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/UsersDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/model/content/music/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/content/music/Music.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/model/content/properties/MetaData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/model/content/properties/MetaData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/model/content/properties/Tag.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/server/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/server/ServerWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/server/ServerWorker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/utils/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/utils/GUI.java" afterDir="false" />
@@ -125,6 +113,7 @@
       <workItem from="1577023918852" duration="15082000" />
       <workItem from="1577110438236" duration="19363000" />
       <workItem from="1577207350612" duration="5784000" />
+      <workItem from="1577270567185" duration="5321000" />
     </task>
     <servers />
   </component>

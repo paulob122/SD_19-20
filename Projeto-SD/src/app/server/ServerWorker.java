@@ -99,6 +99,8 @@ public class ServerWorker implements Runnable {
 
     private void authenticate() throws IOException {
 
+        System.out.println(fss_system.toString());
+
         String command_content = in_reader.readLine();
 
         String[] parts = command_content.split("\\s+");

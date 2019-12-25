@@ -44,6 +44,8 @@ public class Client {
         in_socket = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
         out_socket = new PrintWriter(client_socket.getOutputStream());
         out_socket.flush();
+
+        client_name = "";
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -70,21 +72,21 @@ public class Client {
 
             while (stop == false) {
 
+                System.out.print("option> ");
+
                 char option = Input.read_char(keyboard_input);
 
                 switch (Character.toLowerCase(option)) {
 
                     case 'e': //e: Exit the system
 
-                        System.out.println("option> EXIT");
+                        System.out.println("Goodbye =)");
 
                         stop = true;
 
                         break;
 
                     case 'a': //a: Authenticate
-
-                        System.out.println("option> AUTHENTICATE:");
 
                         String name, pass;
 
@@ -100,7 +102,7 @@ public class Client {
 
                     case 'r': //r: Register
 
-                        System.out.println("option> REGISTER:");
+                        System.out.println("> Insert your credentials:");
 
                         System.out.print("Name: ");
                         name = Input.read_string(keyboard_input);
@@ -141,11 +143,15 @@ public class Client {
 
     private static void RUN_after_login(String name) {
 
+        client_name = name;
+
         GUI.menu_after_login(name);
 
         boolean stop = false;
 
         while (stop == false) {
+
+            System.out.print("option> ");
 
             char option = Input.read_char(keyboard_input);
 
@@ -153,11 +159,9 @@ public class Client {
 
                 case 's':
 
-                    System.out.println("option> SEARCH:");
-
                     String tag_to_search;
 
-                    System.out.print("Insert a tag: ");
+                    System.out.print("tag> ");
                     tag_to_search = Input.read_string(keyboard_input);
 
                     search_message(tag_to_search);
@@ -174,9 +178,16 @@ public class Client {
 
                 case 'o':
 
-                    System.out.println("option>LOGOUT");
+                    System.out.println("Going back to main menu...");
 
                     logout_message();
+
+                    break;
+
+                case 'h':
+
+                    GUI.clear_screen();
+                    RUN_after_login(name);
 
                     break;
 
@@ -243,7 +254,7 @@ public class Client {
 
         GeneralMessage.show(1, "server", reply_from_server, false);
 
-        String reply_parts[] = reply_from_server.split("\\s+");
+        String[] reply_parts = reply_from_server.split("\\s+");
 
         if (reply_parts[0].equals("Registration")) {
 
@@ -293,7 +304,10 @@ public class Client {
 
             }
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+
+            GeneralMessage.show(0, "client", "could not read server reply", false);
+        }
     }
 
     private static void logout_message() {
@@ -305,10 +319,16 @@ public class Client {
 
             String reply_from_server = in_socket.readLine();
 
+            if (reply_from_server.equals("logout successfull")) {
+
+                main(null);
+            }
+
             GeneralMessage.show(1, "server", reply_from_server, false);
 
         } catch (Exception e) {
 
+            GeneralMessage.show(0, "client", "could not read server reply", false);
         }
     }
 }

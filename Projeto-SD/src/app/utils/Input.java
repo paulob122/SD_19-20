@@ -8,9 +8,18 @@ public class Input {
 
         String input = "";
 
-        while (input.length() != 1) {
+        while (true) {
 
             input = keyboard_input.nextLine();
+
+            if (input.length() == 1) {
+
+                break;
+
+            } else {
+
+                System.out.print("Insert only one char: ");
+            }
         }
 
         return input.charAt(0);
@@ -20,9 +29,18 @@ public class Input {
 
         String input = "";
 
-        while (input.length() == 0) {
+        while (true) {
 
             input = keyboard_input.nextLine();
+
+            if (input.length() > 0) {
+
+                break;
+            } else {
+
+                System.out.print("Insert a valid string: ");
+            }
+
         }
 
         return input;

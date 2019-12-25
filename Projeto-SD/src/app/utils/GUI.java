@@ -24,13 +24,13 @@ public class GUI {
 
         StringBuilder mainmenuSB = new StringBuilder();
 
-        mainmenuSB.append("--------------------------------------------------\n");
+        mainmenuSB.append("-----------------------------------------------------------\n");
         mainmenuSB.append("User: " + username + "\n");
-        mainmenuSB.append("--------------------------------------------------\n");
+        mainmenuSB.append("-----------------------------------------------------------\n");
 
-        mainmenuSB.append("s: Search | u: Upload | d: Download | o: Logout   \n");
+        mainmenuSB.append("s: Search | u: Upload | d: Download | o: Logout | h: help  \n");
 
-        mainmenuSB.append("--------------------------------------------------\n");
+        mainmenuSB.append("-----------------------------------------------------------\n");
 
         System.out.println(mainmenuSB.toString());
     }

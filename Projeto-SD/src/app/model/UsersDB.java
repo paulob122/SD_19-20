@@ -31,8 +31,10 @@ public class UsersDB {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\tregisted: ").append(this.users.toString()).append("\n");
-        sb.append("\tin session: ").append(this.current_authenticated_users.keySet().toString()).append("\n");
+        sb.append("{\n");
+        sb.append("\tRegisted: ").append(this.users.toString()).append("\n");
+        sb.append("\tIn session: ").append(this.current_authenticated_users.keySet().toString());
+        sb.append("\n}");
 
         return sb.toString();
     }
@@ -89,7 +91,13 @@ public class UsersDB {
 
     public boolean is_user_authenticated(String name) {
 
-        return this.current_authenticated_users.containsKey(name);
+        this.lock.lock();
+
+        boolean is_authenticated = this.current_authenticated_users.containsKey(name);
+
+        this.lock.unlock();
+
+        return is_authenticated;
     }
 
     public void add_user_authenticated(String name) {
@@ -105,8 +113,7 @@ public class UsersDB {
 
         this.lock.lock();
 
-        if (this.current_authenticated_users.remove(name) == null)
-            return false;
+        this.current_authenticated_users.remove(name);
 
         this.lock.unlock();
 
