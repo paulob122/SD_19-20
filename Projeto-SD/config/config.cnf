@@ -1,0 +1,6 @@
+user_upload_path=../content/user-folder/
+server_db_path=../content/server-database/
+server_host_address=localhost
+server_port=12345
+MAX_SIZE(bytes)=10000
+MAX_DOWN(concurrent)=not_set
