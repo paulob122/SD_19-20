@@ -97,4 +97,14 @@ public class FileSharingSystem {
 
         return this.content.get(id);
     }
+
+    public void download_content(int id) {
+
+        this.content.download(id);
+    }
+
+    public boolean has_content(int id) {
+
+        return this.content.containsKey(id);
+    }
 }

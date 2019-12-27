@@ -16,6 +16,14 @@ public class MetaData {
         this.tags = tags;
     }
 
+    public MetaData(String title, String artist, int year) {
+        this.title = title;
+        this.artist = artist;
+        this.year = year;
+        this.tags = new HashSet<>();
+        this.tags.add("*");
+    }
+
     public MetaData() {
 
         this.title = "empty";
@@ -23,6 +31,7 @@ public class MetaData {
         this.year = 1234;
 
         this.tags = new HashSet<>();
+        this.tags.add("*");
     }
 
     public void add_tag(String tag) {

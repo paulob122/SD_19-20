@@ -79,7 +79,7 @@ public class ServerWorker implements Runnable {
 
                     case "UPLOAD_REQUEST": upload(); break;
 
-                    case "DOWNLOAD_REQUEST": break;
+                    case "DOWNLOAD_REQUEST": download(); break;
 
                     default:
                         GeneralMessage.show(2, "worker", "got: invalid message " + message_from_client + ", from: " + client_socket.getRemoteSocketAddress(), false);
@@ -93,7 +93,7 @@ public class ServerWorker implements Runnable {
             this.client_socket.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
             GeneralMessage.show(2, "worker", "error closing socket...", true);
         }
 
@@ -124,14 +124,6 @@ public class ServerWorker implements Runnable {
         String command_content = in_reader.readLine();
 
         String[] parts = command_content.split("\\s+");
-
-        if (fss_system.is_user_in_session(parts[0])) {
-
-            out_writer.println("you are already authenticated in another session " + parts[0]);
-            out_writer.flush();
-
-            return;
-        }
 
         boolean ok = fss_system.authenticate(parts[0], parts[1]);
 
@@ -258,4 +250,72 @@ public class ServerWorker implements Runnable {
         //in_reader.readLine();
     }
 
+    private void download() throws IOException {
+
+        GeneralMessage.show(2, "worker", "got: " + "DOWNLOAD, from: " + client_socket.getRemoteSocketAddress(), false);
+
+        String content_id_as_string = in_reader.readLine();
+
+        int id = Integer.parseInt(content_id_as_string);
+
+        if (!fss_system.has_content(id)) {
+
+            this.out_writer.println("Content was not found on server database!");
+            this.out_writer.flush();
+
+            return;
+        }
+
+        StringBuilder content_download_sb = new StringBuilder();
+
+        //withoud considering multiple downloads. assuming client can download
+        fss_system.download_content(id);
+
+        content_download_sb.append("Downloading content:\n");
+        Music m = fss_system.get_content(id);
+        content_download_sb.append(m.toString()).append("\n");
+
+        this.out_writer.print(content_download_sb.toString());
+        this.out_writer.flush();
+
+        //TODO: could return null
+        //assuming file to download exists on server database
+        File download_file = new File(config.getServer_db_path() + m.getTitle());
+
+        double file_size_bytes = download_file.length();
+
+        //Sent file size to client
+        StringBuilder download_request = new StringBuilder();
+        download_request.append(file_size_bytes).append("\n");
+        download_request.append(m.getTitle()).append("\n");
+        this.out_writer.print(download_request.toString());
+        this.out_writer.flush();
+
+
+        byte[] chunk = new byte[config.getMAX_SIZE()];
+
+        FileInputStream fis = new FileInputStream(download_file);
+        DataOutputStream dos = new DataOutputStream(client_socket.getOutputStream());
+
+        int bytes_written = 0;
+        int chunk_nr = 0;
+        int bytes_sum = 0;
+
+        while ((bytes_written = fis.read(chunk)) > 0) {
+
+            dos.write(chunk, 0, bytes_written);
+            dos.flush();
+
+            GeneralMessage.show(3, "download", "Sent chunk " + chunk_nr + " of size " + bytes_written, false);
+
+            bytes_sum += bytes_written;
+
+            chunk_nr++;
+        }
+
+        System.out.println();
+        GeneralMessage.show(3, "status", "Chunk size sum = " + bytes_sum + " bytes | File size = " + file_size_bytes + " bytes | Checksum = " + (bytes_sum==file_size_bytes?"good":"corrupted"), false);
+        System.out.println();
+    }
 }
+

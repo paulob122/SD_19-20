@@ -210,9 +210,11 @@ public class Client {
 
                 case 'd'://download
 
-                    System.out.print("> Content ID?: ");
+                    System.out.print("Content ID? (press 0 to go back and search): ");
 
                     int id = Input.read_integer(keyboard_input);
+
+                    if (id == 0) break;
 
                     download_message(id);
 
@@ -336,7 +338,7 @@ public class Client {
                     while(current < number_of_results) {
 
                         result_line = in_socket.readLine();
-                        System.out.println("\t# " + current + " = " + result_line);
+                        System.out.println("\t#" + current + "| " + result_line);
                         current++;
                     }
 
@@ -351,6 +353,8 @@ public class Client {
 
             GeneralMessage.show(0, "client", "could not read server reply", false);
         }
+
+        System.out.println();
     }
 
     private static void logout_message() {
@@ -465,8 +469,6 @@ public class Client {
                 GeneralMessage.show(1, "status", "Chunk size sum = " + sum + " bytes | File size = " + bytes + " bytes | Checksum = " + (sum==bytes?"good":"corrupted"), false);
                 System.out.println();
 
-
-
             } catch (IOException e) {
 
                 GeneralMessage.show(0, "server", "Error reading server response. Try to upload later...", true);
@@ -482,8 +484,7 @@ public class Client {
     private static void download_message(int id) {
 
         System.out.println();
-        GeneralMessage.show(1, "client", "Requesting download of content ID = " + id + "...\n", false);
-        System.out.println();
+        GeneralMessage.show(1, "client", "Requesting download of content ID = " + id + "...", false);
 
         StringBuilder msg = new StringBuilder();
 
@@ -491,8 +492,94 @@ public class Client {
         msg.append(id).append("\n");
 
         out_socket.print(msg.toString());
-        out_socket.toString();
+        out_socket.flush();
 
+        String reply_1_from_server = "";
+        String reply_2_from_server = "";
 
+        try {
+
+            reply_1_from_server = in_socket.readLine();
+
+        } catch (Exception e) {
+
+            GeneralMessage.show(0, "client", "could not read server reply\n", false);
+        }
+
+        if (reply_1_from_server.equals("Content was not found on server database!")) {
+
+            GeneralMessage.show(1, "server", reply_1_from_server + "\n", false);
+
+            return;
+
+        } else { //Can dowload...
+
+            GeneralMessage.show(1, "server", reply_1_from_server, false);
+
+            try {
+
+                reply_2_from_server = in_socket.readLine();
+
+            } catch (Exception e) {
+
+                GeneralMessage.show(0, "client", "could not read server reply", false);
+            }
+        }
+
+        //download should be starting at this point
+
+        //1: get file bytes from server reply
+        String bytes_as_string = "";
+        String file_name = "";
+        try {
+
+            bytes_as_string = in_socket.readLine();
+            file_name = in_socket.readLine();
+
+        } catch (IOException e) {
+            GeneralMessage.show(0, "client", "could not read server reply", false);
+        }
+
+        double bytes = Double.parseDouble(bytes_as_string);
+
+        //2: create output files and data streams
+
+        int count = 0, r = 0, sum = 0;
+
+        FileOutputStream fos = null;
+        DataInputStream dis = null;
+        try {
+
+            fos = new FileOutputStream(new File(config.getUser_upload_path() + file_name));
+            dis = new DataInputStream(client_socket.getInputStream());
+
+        } catch (FileNotFoundException e) { e.printStackTrace(); }
+          catch (IOException e) { e.printStackTrace(); }
+
+        //3: get all chunks from server answers
+
+        byte[] chunk = new byte[config.getMAX_SIZE()];
+
+        try {
+
+            while ((count = dis.read(chunk)) > 0) {
+
+                GeneralMessage.show(3, "download", "Got/Wrote chunk " + r + " of size " + count + " from " + client_socket.getRemoteSocketAddress(), false);
+
+                r++;
+                sum += count;
+
+                fos.write(chunk, 0, count);
+                fos.flush();
+
+                if (sum == bytes) break;
+            }
+
+        } catch (IOException e) { GeneralMessage.show(3, "status", "could not read/write chunk", false); }
+
+        GeneralMessage.show(3, "status", "Chunk size sum = " + sum + " bytes | File size = " + bytes + " bytes | Checksum = " + (sum==bytes?"good":"corrupted"), false);
+        System.out.println();
+        GeneralMessage.show(1, "server", reply_2_from_server + "\n", false);
+        System.out.println();
     }
 }

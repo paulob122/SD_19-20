@@ -30,7 +30,7 @@ public class Music {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("ID: ").append(id).append(", Metadata: ");
+        sb.append("ID: ").append(id).append(", DOWNL: ").append(this.download_times).append(", Metadata: ");
         sb.append(metadata.toString());
 
         return sb.toString();
@@ -43,5 +43,13 @@ public class Music {
         res = this.metadata.getTitle();
 
         return res;
+    }
+
+    public void download() {
+
+        synchronized (this) {
+
+            this.download_times++;
+        }
     }
 }

@@ -44,15 +44,15 @@ public class ContentDB {
 
     private void init_content_test() {
 
-        MetaData md1 = new MetaData();
-        MetaData md2 = new MetaData();
+        MetaData md1 = new MetaData("music1", "jose malhoa", 1920);
+        MetaData md2 = new MetaData("music2", "metallica", 2002);
         MetaData md3 = new MetaData();
         MetaData md4 = new MetaData();
 
-        Music m1 = new Music(1, 1981, md1);
-        Music m2 = new Music(2, 1982, md2);
-        Music m3 = new Music(3, 1983, md3);
-        Music m4 = new Music(4, 1984, md4);
+        Music m1 = new Music(1, 0, md1);
+        Music m2 = new Music(2, 1, md2);
+        Music m3 = new Music(3, 2, md3);
+        Music m4 = new Music(4, 3, md4);
 
         m1.add_tag("rock");
         m1.add_tag("pop");
@@ -122,6 +122,24 @@ public class ContentDB {
         }
 
         return m;
+    }
+
+    public void download(int id) {
+
+        Music m = this.get(id);
+
+        m.download();
+    }
+
+    public boolean containsKey(int id) {
+
+        this.lock.lock();
+
+        boolean exists = this.musics.containsKey(id);
+
+        this.lock.unlock();
+
+        return exists;
     }
 }
 

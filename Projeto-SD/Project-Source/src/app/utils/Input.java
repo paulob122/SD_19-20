@@ -90,7 +90,7 @@ public class Input {
 
             } catch (NumberFormatException e) {
 
-                System.out.print("Invalid ID, try to insert a number (>0): ");
+                System.out.print("Invalid ID, try to insert a number (>=0): ");
             }
 
             if (input.length() > 0) {
