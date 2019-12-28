@@ -2,6 +2,7 @@ package app.server;
 
 
 import app.model.FileSharingSystem;
+import app.server.tools.DownloadRequestsBuffer;
 import app.server.tools.ClientIdentifier;
 import app.utils.Config;
 import app.utils.GeneralMessage;
@@ -24,6 +25,7 @@ public class Server {
     private FileSharingSystem system;
 
     private List<ClientIdentifier> connected_clients_list;
+    private DownloadRequestsBuffer downloadRequestBuffer;
 
     //------------------------------------------------------------
 
@@ -41,6 +43,8 @@ public class Server {
         this.port = cnf.getServer_port();
 
         this.listenTo("INT");
+
+        this.downloadRequestBuffer = new DownloadRequestsBuffer(config);
     }
 
     //------------------------------------------------------------
@@ -72,7 +76,7 @@ public class Server {
 
             try {
 
-                sv_worker = new ServerWorker(client_socket, this.system, this.config);
+                sv_worker = new ServerWorker(client_socket, this.system, this.config, this.downloadRequestBuffer);
 
             } catch (IOException e) { GeneralMessage.show(1, "server", "error running server worker...", false);}
 

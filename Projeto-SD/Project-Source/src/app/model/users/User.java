@@ -38,11 +38,11 @@ public class User {
 
     //---------------------------------------------------------------------
 
-    private String getName() {
+    public synchronized String getName() {
         return name;
     }
 
-    private String getPassword() {
+    private synchronized String getPassword() {
         return password;
     }
 

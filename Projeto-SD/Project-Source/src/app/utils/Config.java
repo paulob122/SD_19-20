@@ -17,6 +17,7 @@ public class Config {
     private String server_host_address;
     private int server_port;
     private int MAX_SIZE; //in bytes
+    private int MAX_DOWN;
 
     //------------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ public class Config {
         this.server_host_address = "";
         this.server_port = -1;
         this.MAX_SIZE = -1;
+        this.MAX_DOWN = 0;
     }
 
     //------------------------------------------------------------------------
@@ -51,10 +53,15 @@ public class Config {
         this.server_host_address = config_values.get(2);
         this.server_port = Integer.parseInt(config_values.get(3));
         this.MAX_SIZE = Integer.parseInt(config_values.get(4));
+        this.MAX_DOWN = Integer.parseInt(config_values.get(5));
     }
 
     public int getMAX_SIZE() {
         return MAX_SIZE; //result in bytes
+    }
+
+    public int getMAX_DOWN() {
+        return MAX_DOWN; //result in bytes
     }
 
     public static String getConfig_path() {

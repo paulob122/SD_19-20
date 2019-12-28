@@ -3,6 +3,8 @@ package app.server;
 import app.model.FileSharingSystem;
 import app.model.content.music.Music;
 import app.model.users.User;
+import app.server.tools.ClientIdentifier;
+import app.server.tools.DownloadRequestsBuffer;
 import app.utils.Config;
 import app.utils.GeneralMessage;
 
@@ -22,12 +24,14 @@ public class ServerWorker implements Runnable {
     private BufferedReader in_reader;
     private PrintWriter out_writer;
     private Socket client_socket;
+
     private FileSharingSystem fss_system;
     private Config config;
+    private DownloadRequestsBuffer download_requests_buffer;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public ServerWorker(Socket client_socket, FileSharingSystem system, Config config) throws IOException {
+    public ServerWorker(Socket client_socket, FileSharingSystem system, Config config, DownloadRequestsBuffer downloadRequestBuffer) throws IOException {
 
         this.in_reader = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
         this.out_writer = new PrintWriter(client_socket.getOutputStream());
@@ -40,6 +44,8 @@ public class ServerWorker implements Runnable {
         this.user_authenticated = null;
 
         this.config = config;
+
+        this.download_requests_buffer = downloadRequestBuffer;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -275,14 +281,30 @@ public class ServerWorker implements Runnable {
         Music m = fss_system.get_content(id);
         content_download_sb.append(m.toString()).append("\n");
 
-        this.out_writer.print(content_download_sb.toString());
-        this.out_writer.flush();
-
         //TODO: could return null
         //assuming file to download exists on server database
         File download_file = new File(config.getServer_db_path() + m.getTitle());
 
         double file_size_bytes = download_file.length();
+
+        /*START: TEMPORARY CODE*/
+
+        ClientIdentifier client_requesting_download = new ClientIdentifier(this.client_socket, this.user_authenticated.getName());
+        client_requesting_download.setDownload_size_in_bytes(file_size_bytes);
+        this.download_requests_buffer.push(client_requesting_download);
+
+        /*
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        */
+
+        /*END: TEMPORARY CODE*/
+
+        this.out_writer.print(content_download_sb.toString());
+        this.out_writer.flush();
 
         //Sent file size to client
         StringBuilder download_request = new StringBuilder();
@@ -290,7 +312,6 @@ public class ServerWorker implements Runnable {
         download_request.append(m.getTitle()).append("\n");
         this.out_writer.print(download_request.toString());
         this.out_writer.flush();
-
 
         byte[] chunk = new byte[config.getMAX_SIZE()];
 
@@ -306,7 +327,7 @@ public class ServerWorker implements Runnable {
             dos.write(chunk, 0, bytes_written);
             dos.flush();
 
-            GeneralMessage.show(3, "download", "Sent chunk " + chunk_nr + " of size " + bytes_written, false);
+            GeneralMessage.show(3, "download: " + this.user_authenticated.getName(), "Sent chunk " + chunk_nr + " of size " + bytes_written, false);
 
             bytes_sum += bytes_written;
 
@@ -314,8 +335,14 @@ public class ServerWorker implements Runnable {
         }
 
         System.out.println();
-        GeneralMessage.show(3, "status", "Chunk size sum = " + bytes_sum + " bytes | File size = " + file_size_bytes + " bytes | Checksum = " + (bytes_sum==file_size_bytes?"good":"corrupted"), false);
+        GeneralMessage.show(3, "status: " + this.user_authenticated.getName(), "Chunk size sum = " + bytes_sum + " bytes | File size = " + file_size_bytes + " bytes | Checksum = " + (bytes_sum==file_size_bytes?"good":"corrupted"), false);
         System.out.println();
+
+        try {
+            this.download_requests_buffer.pop();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 

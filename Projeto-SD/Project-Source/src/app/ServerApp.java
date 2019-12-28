@@ -23,7 +23,7 @@ public class ServerApp {
 
         Config cnf = new Config();
 
-        try { cnf.init(); } catch (IOException e) { GeneralMessage.show(0, "app", "error initializing config", true); return;}
+        try { cnf.init(); } catch (Exception e) { GeneralMessage.show(0, "app", "error initializing config", true); return;}
 
         FileSharingSystem fss = new FileSharingSystem();
 
