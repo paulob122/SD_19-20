@@ -10,7 +10,9 @@ import app.utils.GeneralMessage;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class ServerWorker implements Runnable {
@@ -231,20 +233,21 @@ public class ServerWorker implements Runnable {
         }
 
         FileOutputStream fos = new FileOutputStream(new File(config.getServer_db_path() + desc_parts[0]));
-        DataInputStream dis = new DataInputStream(client_socket.getInputStream());
 
         int count = 0, r = 0, sum = 0;
-        byte[] chunk = new byte[config.getMAX_SIZE()];
+        String str;
+        while ((str = in_reader.readLine()) != null) {
 
-        while ((count = dis.read(chunk)) > 0) {
+            byte[] chunk = Base64.getDecoder().decode(str);
+            count = chunk.length;
+            sum += count;
+
+            fos.write(chunk);
+            fos.flush();
 
             GeneralMessage.show(3, "upload", "Got/Wrote chunk " + r + " of size " + count + " from " + client_socket.getRemoteSocketAddress(), false);
 
             r++;
-            sum+= count;
-
-            fos.write(chunk, 0, count);
-            fos.flush();
 
             if (sum == bytes) break;
         }
@@ -299,7 +302,7 @@ public class ServerWorker implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-         */
+        */
 
         /*END: TEMPORARY CODE*/
 
@@ -316,7 +319,6 @@ public class ServerWorker implements Runnable {
         byte[] chunk = new byte[config.getMAX_SIZE()];
 
         FileInputStream fis = new FileInputStream(download_file);
-        DataOutputStream dos = new DataOutputStream(client_socket.getOutputStream());
 
         int bytes_written = 0;
         int chunk_nr = 0;
@@ -324,8 +326,8 @@ public class ServerWorker implements Runnable {
 
         while ((bytes_written = fis.read(chunk)) > 0) {
 
-            dos.write(chunk, 0, bytes_written);
-            dos.flush();
+            out_writer.println(Base64.getEncoder().encodeToString(Arrays.copyOfRange(chunk, 0, bytes_written)));
+            out_writer.flush();
 
             GeneralMessage.show(3, "download: " + this.user_authenticated.getName(), "Sent chunk " + chunk_nr + " of size " + bytes_written, false);
 

@@ -448,13 +448,12 @@ public class Client {
                 byte[] chunk = new byte[config.getMAX_SIZE()];
 
                 FileInputStream fis = new FileInputStream(matching_file);
-                DataOutputStream dos = new DataOutputStream(client_socket.getOutputStream());
 
                 int count = 0, r = 0, sum = 0;
                 while ((count = fis.read(chunk)) > 0) {
 
-                    dos.write(chunk, 0, count);
-                    dos.flush();
+                    out_socket.println(Base64.getEncoder().encodeToString(Arrays.copyOfRange(chunk, 0, count)));
+                    out_socket.flush();
 
                     GeneralMessage.show(1, "client", "Sent chunk " + r + " of size " + count, false);
 
@@ -545,30 +544,31 @@ public class Client {
         int count = 0, r = 0, sum = 0;
 
         FileOutputStream fos = null;
-        DataInputStream dis = null;
+
         try {
 
             fos = new FileOutputStream(new File(config.getUser_upload_path() + file_name));
-            dis = new DataInputStream(client_socket.getInputStream());
 
         } catch (FileNotFoundException e) { e.printStackTrace(); }
-          catch (IOException e) { e.printStackTrace(); }
 
         //3: get all chunks from server answers
 
-        byte[] chunk = new byte[config.getMAX_SIZE()];
-
         try {
 
-            while ((count = dis.read(chunk)) > 0) {
+            String str;
+
+            while ((str = in_socket.readLine()) != null) {
+
+                byte[] chunk = Base64.getDecoder().decode(str);
+                count = chunk.length;
+                sum += count;
+
+                fos.write(chunk);
+                fos.flush();
 
                 GeneralMessage.show(3, "download", "Got/Wrote chunk " + r + " of size " + count + " from " + client_socket.getRemoteSocketAddress(), false);
 
                 r++;
-                sum += count;
-
-                fos.write(chunk, 0, count);
-                fos.flush();
 
                 if (sum == bytes) break;
             }

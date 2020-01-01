@@ -46,13 +46,9 @@ public class ContentDB {
 
         MetaData md1 = new MetaData("music1", "jose malhoa", 1920);
         MetaData md2 = new MetaData("music2", "metallica", 2002);
-        MetaData md3 = new MetaData();
-        MetaData md4 = new MetaData();
 
         Music m1 = new Music(1, 0, md1);
         Music m2 = new Music(2, 1, md2);
-        Music m3 = new Music(3, 2, md3);
-        Music m4 = new Music(4, 3, md4);
 
         m1.add_tag("rock");
         m1.add_tag("pop");
@@ -61,16 +57,10 @@ public class ContentDB {
         m2.add_tag("rock");
         m2.add_tag("pop");
 
-        m3.add_tag("rock");
-
-        m4.add_tag("jazz");
-
         this.musics.put(1, m1);
         this.musics.put(2, m2);
-        this.musics.put(3, m3);
-        this.musics.put(4, m4);
 
-        this.lastID = 4;
+        this.lastID = 2;
     }
 
     public List<Music> filter_tag(String tag) {
@@ -92,7 +82,9 @@ public class ContentDB {
 
         this.lastID++;
 
-        MetaData md = new MetaData(title, artist, year, new HashSet<>(list_of_tags));
+        HashSet<String> tags = new HashSet();
+        tags.add("*");
+        MetaData md = new MetaData(title, artist, year, tags);
         Music m = new Music(this.lastID, 0, md);
 
         this.musics.put(this.lastID, m);
