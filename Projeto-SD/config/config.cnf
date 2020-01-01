@@ -3,4 +3,4 @@ server_db_path=../content/server-database/
 server_host_address=localhost
 server_port=12345
 MAX_SIZE(bytes)=10000
-MAX_DOWN(concurrent)=100000
+MAX_DOWN(concurrent)=10000

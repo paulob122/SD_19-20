@@ -107,7 +107,6 @@ public class DownloadRequestsBuffer {
 
             e.printStackTrace();
         }
-
         if (r == 1) {
             if (isBigDowload(c_id.getDownloadSize())) {
                 unlockBigDownload();
