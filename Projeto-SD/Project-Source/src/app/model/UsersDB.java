@@ -6,18 +6,34 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Stores the Users of the system and the logic around them.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class UsersDB {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Registred users.
+     */
     private Map<String, User> users;
-
+    /**
+     * Users in session.
+     */
     private Map<String, User> current_authenticated_users;
-
+    /**
+     * Monitor to control access to user information.
+     */
     private ReentrantLock lock;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Empty constructor for UserDB
+     */
     public UsersDB () {
 
         this.users = new HashMap<>();
@@ -27,6 +43,9 @@ public class UsersDB {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * @return a representation of the users structures as a string
+     */
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
@@ -39,6 +58,11 @@ public class UsersDB {
         return sb.toString();
     }
 
+    /**
+     * Says if a username exists on the system
+     * @param name user name
+     * @return true in case it exists
+     */
     public boolean containsKey(String name) {
 
         this.lock.lock();
@@ -50,6 +74,11 @@ public class UsersDB {
         return exists;
     }
 
+    /**
+     * Gets the user matching a name.
+     * @param name user name
+     * @return the user
+     */
     public User get(String name) {
 
         User u = null;
@@ -68,6 +97,12 @@ public class UsersDB {
         return this.users.get(name);
     }
 
+    /**
+     * Checks if the password given as input matches the user password
+     * @param name username
+     * @param password password to check
+     * @return true in case password matches
+     */
     public boolean check_user_password(String name, String password) {
 
         User u = this.get(name);
@@ -75,6 +110,11 @@ public class UsersDB {
         return u.check_password(password);
     }
 
+    /**
+     * Adds user to users data structures.
+     * @param name username
+     * @param NEW user
+     */
     public void put(String name, User NEW) {
 
         try {
@@ -89,6 +129,11 @@ public class UsersDB {
         }
     }
 
+    /**
+     * Says if a user is already in session
+     * @param name username
+     * @return true in case it is logged
+     */
     public boolean is_user_authenticated(String name) {
 
         this.lock.lock();
@@ -100,6 +145,10 @@ public class UsersDB {
         return is_authenticated;
     }
 
+    /**
+     * Adds username to the current users logged
+     * @param name username
+     */
     public void add_user_authenticated(String name) {
 
         this.lock.lock();
@@ -109,6 +158,11 @@ public class UsersDB {
         this.lock.unlock();
     }
 
+    /**
+     * Takes user out of the users in session set
+     * @param name username
+     * @return true
+     */
     public boolean logout_user(String name) {
 
         this.lock.lock();

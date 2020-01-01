@@ -15,24 +15,59 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
+/**
+ * Handles the clients that connect to the server and parses its messages through the socket.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class ServerWorker implements Runnable {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * User authenticated.
+     */
     private User user_authenticated;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Reader for the socket input stream
+     */
     private BufferedReader in_reader;
+    /**
+     * Writter for the socket output stream
+     */
     private PrintWriter out_writer;
+    /**
+     * Socket for the client connection
+     */
     private Socket client_socket;
 
+    /**
+     * System reference from the server.
+     */
     private FileSharingSystem fss_system;
+    /**
+     * Server config
+     */
     private Config config;
+    /**
+     * Download Requests buffer.
+     */
     private DownloadRequestsBuffer download_requests_buffer;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Parametrized construcotr for a ServerWorker given all the server configurations an client socket.
+     * @param client_socket client socket
+     * @param system system
+     * @param config server config
+     * @param downloadRequestBuffer server download requests buffer
+     * @throws IOException in case buffers initialization exception occurs
+     */
     public ServerWorker(Socket client_socket, FileSharingSystem system, Config config, DownloadRequestsBuffer downloadRequestBuffer) throws IOException {
 
         this.in_reader = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
@@ -52,6 +87,10 @@ public class ServerWorker implements Runnable {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Runs the server worker and waits for the client input.
+     * Parses the input, uses system to control data and writes answers to the client.
+     */
     @Override
     public void run() {
 
@@ -109,6 +148,10 @@ public class ServerWorker implements Runnable {
         GeneralMessage.show(1, "server", "client disconnected", true);
     }
 
+    /**
+     * Logs out user from the system.
+     * @throws IOException socket IO
+     */
     private void logout() throws IOException {
 
         String username = in_reader.readLine();
@@ -127,6 +170,10 @@ public class ServerWorker implements Runnable {
         }
     }
 
+    /**
+     * logs in user in the system
+     * @throws IOException socket IO
+     */
     private void authenticate() throws IOException {
 
         String command_content = in_reader.readLine();
@@ -149,6 +196,10 @@ public class ServerWorker implements Runnable {
         }
     }
 
+    /**
+     * Creats user given its parameters
+     * @throws IOException socket IO
+     */
     private void register() throws IOException {
 
         String command_content = in_reader.readLine();
@@ -173,6 +224,10 @@ public class ServerWorker implements Runnable {
         }
     }
 
+    /**
+     * Searchs for a music tag and shows the result to the user, line by line.
+     * @throws IOException socket IO
+     */
     private void search() throws IOException {
 
         String command_content = in_reader.readLine();
@@ -202,6 +257,10 @@ public class ServerWorker implements Runnable {
         }
     }
 
+    /**
+     * Uploads content to the system reading file bytes from the socket and recreates the file in the server side.
+     * @throws IOException socket IO
+     */
     private void upload() throws IOException {
 
         GeneralMessage.show(2, "worker", "got: " + "UPLOAD, from: " + client_socket.getRemoteSocketAddress(), false);
@@ -259,6 +318,10 @@ public class ServerWorker implements Runnable {
         //in_reader.readLine();
     }
 
+    /**
+     * Downloads content from the server and sends files bytes by chunks in the socket.
+     * @throws IOException socket IO
+     */
     private void download() throws IOException {
 
         GeneralMessage.show(2, "worker", "got: " + "DOWNLOAD, from: " + client_socket.getRemoteSocketAddress(), false);

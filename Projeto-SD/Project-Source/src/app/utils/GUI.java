@@ -1,10 +1,17 @@
+
 package app.utils;
 
-import java.io.IOException;
-import java.util.stream.StreamSupport;
-
+/**
+ * Methods to show GUI interfaces to client.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class GUI {
 
+    /**
+     * Shows the main menu.
+     */
     public static void main_menu () {
 
         StringBuilder mainmenuSB = new StringBuilder();
@@ -20,6 +27,9 @@ public class GUI {
         System.out.println(mainmenuSB.toString());
     }
 
+    /**
+     * Shows user menu.
+     */
     public static void menu_after_login (String username) {
 
         StringBuilder mainmenuSB = new StringBuilder();

@@ -9,10 +9,27 @@ import app.utils.GeneralMessage;
 
 import java.io.IOException;
 
+/**
+ * Main Server app that loads the config, server socket and runs the server.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class ServerApp {
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Server Port
+     */
     private static final int port = 12345;
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Runs the server and initializes the configs
+     * @param args not used
+     */
     public static void main(String[] args) {
 
         //--------------------------------------------------------------------------------------------------------------

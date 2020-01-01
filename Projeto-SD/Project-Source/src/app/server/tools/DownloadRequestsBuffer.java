@@ -7,40 +7,87 @@ import app.utils.GeneralMessage;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Implements a buffer of download requests in order to set up a MAX_DOWN downloads
+ * for the server requests. It also manages waiting clients by its download size.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class DownloadRequestsBuffer {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    //Setting up the bounded buffer to store downloads atm
-
+    /**
+     * ClientIdentifier queue for the users downloading at the moment.
+     */
     private ClientIdentifier[] downloadQueue;
+    /**
+     * Next position in the download queue
+     */
     private int nextPosDownloadQueue;
+    /**
+     * Maximum queue size. This value is established by the config value MAX_DOWN.
+     */
     private int downloadQueue_MAX_SIZE;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Monitor for the waiting clients trying to get download request done
+     */
     private ReentrantLock lock;
-
+    /**
+     * Waiting condition for the small downloads
+     */
     private Condition smallDownloadCondition;
+    /**
+     * Waiting condition for the big downloads
+     */
     private Condition bigDownloadCondition;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Number of small downloads that got the lock.
+     */
     private int small_downloads_atm;
+    /**
+     * Number of big downloads that got the lock.
+     */
     private int big_downloads_atm;
 
+    /**
+     * Number of small downloads requests.
+     */
     private int small_downloads_requests;
+    /**
+     * Number of big download requests.
+     */
     private int big_downloads_requests;
 
+    /**
+     * Small downloads priority
+     */
     private int small_downloads_Priority;
+    /**
+     * big downloads priority
+     */
     private int big_downloads_Priority;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * server config based on config.cnf
+     */
     private Config config;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Parametrized constructor for DownloadRequestsBuffer
+     * @param config server config
+     */
     public DownloadRequestsBuffer(Config config) {
 
         this.config = config;
@@ -61,6 +108,9 @@ public class DownloadRequestsBuffer {
 
     }
 
+    /**
+     * @return a representation of the download queue as a string
+     */
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
@@ -75,6 +125,12 @@ public class DownloadRequestsBuffer {
         return sb.toString();
     }
 
+    /**
+     * Attempts to get to download buffer. Gets stuck in waiting condition in case
+     * it doesnt get any preiority.
+     *
+     * @param c_id client id
+     */
     public synchronized void push(ClientIdentifier c_id) {
 
         int r = 0;
@@ -124,6 +180,10 @@ public class DownloadRequestsBuffer {
         notifyAll();
     }
 
+    /**
+     * Trys to get priority in small download
+     * @throws InterruptedException
+     */
     private void lockSmallDownload() throws InterruptedException {
 
         this.lock.lock();
@@ -146,6 +206,10 @@ public class DownloadRequestsBuffer {
         this.lock.unlock();
     }
 
+    /**
+     * Unlocks priority in small download
+     * @throws InterruptedException
+     */
     public void unlockSmallDownload() {
 
         this.lock.lock();
@@ -160,6 +224,10 @@ public class DownloadRequestsBuffer {
         this.lock.unlock();
     }
 
+    /**
+     * Trys to get priority as a big download
+     * @throws InterruptedException
+     */
     private void lockBigDownload() throws InterruptedException {
 
         this.lock.lock();
@@ -183,6 +251,9 @@ public class DownloadRequestsBuffer {
         this.lock.unlock();
     }
 
+    /**
+     * Unlocks priority in big download
+     */
     public void unlockBigDownload() {
 
         this.lock.lock();
@@ -195,6 +266,10 @@ public class DownloadRequestsBuffer {
         this.lock.unlock();
     }
 
+    /**
+     * Removes user from the user downloading queue and notifies waiting threads (clients).
+     * @throws InterruptedException
+     */
     public synchronized void pop() throws InterruptedException {
 
         while (this.nextPosDownloadQueue == 0) {
@@ -207,6 +282,11 @@ public class DownloadRequestsBuffer {
         notifyAll();
     }
 
+    /**
+     * Says if the download size matches a big download
+     * @param size download size
+     * @return true in case its a big download
+     */
     public boolean isBigDowload(double size) {
 
         return size > 51229;

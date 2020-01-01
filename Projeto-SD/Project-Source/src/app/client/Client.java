@@ -1,3 +1,4 @@
+
 package app.client;
 
 import app.utils.Config;
@@ -10,29 +11,65 @@ import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Client class implements an interface for a simple Client app that
+ * communicates with the server via TCP sockets in a string based IO.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class Client {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Stores the port in which server establishes socket communications.
+     */
     private static int port = 12345;
-    private static String host = "localhost"; //192.168.1.67
+    /**
+     * Stores the host where server is stored.
+     * By default this is set to localhost and can be changed in the config.cnf file.
+     */
+    private static String host = "localhost";
+    /**
+     * Stores the process ID associated with the running Client process.
+     */
     private static long CLIENT_PID;
-
+    /**
+     * Stores the user name of the client log.
+     */
     private static String client_name;
-
+    /**
+     * Stores the config class that sets up the whole projet global variables.
+     */
     private static Config config;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Socket to communicate with the server.
+     */
     private static Socket client_socket;
-
+    /**
+     * keyboard scanner to read input from the client (i.e, system.in)
+     */
     private static Scanner keyboard_input;
-
+    /**
+     * Used to read the stream of bytes from the socket (answer from server).
+     */
     private static BufferedReader in_socket;
+    /**
+     * Used to write answers to server via the client_socket output stream
+     */
     private static PrintWriter out_socket;
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Method to inialize all buffers, socket and configuration to start
+     * communicating with the server via sockets.
+     * @throws IOException config, buffers & socket creating errors...
+     */
     private static void init_client() throws IOException {
 
         config = new Config();
@@ -56,6 +93,11 @@ public class Client {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Runs the client app, loads the interface and calls init_client() to start
+     * the TCP socket and buffers to communicate with the server.
+     * @param args not used.
+     */
     public static void main(String[] args) {
 
         //--------------------------------------------------------------------------------------------------------------
@@ -147,6 +189,11 @@ public class Client {
         GeneralMessage.show(0, "client", "client disconnected...", true);
     }
 
+    /**
+     * When client gets authenticated by the server then the interface changes.
+     * New options are loaded and gui controller writes requests to server socket.
+     * @param name user name used to show on the client gui.
+     */
     private static void RUN_after_login(String name) {
 
         client_name = name;
@@ -246,6 +293,13 @@ public class Client {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Sends an authentication message to server based on client input given as parameter.
+     * Message has this format: AUTHENTICATE\nname pass.
+     * Also gets the answer from the server and shows it to client, after that, the method stops.
+     * @param name user name
+     * @param pass password
+     */
     private static void authenticate_message(String name, String pass) {
 
         out_socket.println("AUTHENTICATE\n" + name + " " + pass);
@@ -277,6 +331,13 @@ public class Client {
         }
     }
 
+    /**
+     * Sends an registration message to server based on client input given as parameter.
+     * Message has this format: REGISTER\nname pass.
+     * Also gets the answer from the server and shows it to client, after that, the method stops.
+     * @param name user name
+     * @param pass password
+     */
     private static void register_message(String name, String pass) {
 
         out_socket.println("REGISTER\n" + name + " " + pass);
@@ -307,6 +368,12 @@ public class Client {
         }
     }
 
+    /**
+     * Sends an search message to server based on client input given as parameter.
+     * Message has this format: SEARCH\tag_to_search.
+     * Also gets the answer from the server and shows it to client, after that, the method stops.
+     * @param tag_to_search a string indicating a tag to search
+     */
     private static void search_message(String tag_to_search) {
 
         out_socket.println("SEARCH\n" + tag_to_search);
@@ -355,6 +422,11 @@ public class Client {
         System.out.println();
     }
 
+    /**
+     * Sends an logout message to server.
+     * Message has this format: LOGOUT\nname.
+     * Also gets the answer from the server and shows it to client, after that, the method stops.
+     */
     private static void logout_message() {
 
         out_socket.println("LOGOUT\n" + client_name);
@@ -377,6 +449,18 @@ public class Client {
         }
     }
 
+    /**
+     * Sends an upload message to server based on client input given as parameter.
+     * Gets the file based on title given as input and loads it, if exists, based
+     * on the config file that stores the user data folder location.
+     * Message has this format: UPLOAD_REQUEST\nfile_bytes\ntitle:artist:year:tags_list.
+     * During the upload process shows the chunks being transferd based on MAX_SIZE bytes on memory (this value is stored on config.cnf).
+     * Also gets the answer from the server and shows it to client, after that, the method stops.
+     * @param artist content artist
+     * @param set_of_tags a set of strings representing the content tags
+     * @param title a title for the content (this is also the content file name)
+     * @param year content original year
+     */
     private static void upload_message(String title, String artist, int year, Set<String> set_of_tags) {
 
         String tags = set_of_tags.stream().map(s -> s + " ").collect(Collectors.joining());
@@ -478,6 +562,15 @@ public class Client {
         }
     }
 
+    /**
+     * Sends an download message to server based on client input given as parameter.
+     * Stores the file based on title given as input and saves it on the folder path based
+     * on the config file that stores the user data folder location.
+     * Message has this format: DOWNLOAD_REQUEST\nid\n
+     * During the download process shows the chunks being transferd based on MAX_SIZE bytes on memory (this value is stored on config.cnf).
+     * Also gets the answer from the server and shows it to client, after that, the method stops.
+     * @param id content id as it is stored on the server database
+     */
     private static void download_message(int id) {
 
         System.out.println();

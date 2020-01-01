@@ -1,13 +1,38 @@
 
 package app.utils;
 
+/**
+ * Shows an error/hint/warning message as a formatted text to show on console.
+ *
+ * @author Grupo 19
+ * @version 2020/01/01
+ */
 public class GeneralMessage {
 
+    /**
+     * number of tabs on the message
+     */
     private static int number_of_tabs;
+    /**
+     * message source
+     */
     private static String source;
+    /**
+     * message
+     */
     private static String message;
+    /**
+     * true if you want to store time and hour the message occurs
+     */
     private static boolean store_time_and_hour;
 
+    /**
+     * Shows the message as a string formatted by the parameters
+     * @param tabs number of tabs
+     * @param src message source
+     * @param messg message
+     * @param time to show time
+     */
     public static void show(int tabs,
                               String src,
                               String messg,
@@ -21,6 +46,9 @@ public class GeneralMessage {
         System.out.println(format());
     }
 
+    /**
+     * @return a formatted general message wit the parameters given as parameter.
+     */
     private static String format() {
 
         StringBuilder sb = new StringBuilder();
