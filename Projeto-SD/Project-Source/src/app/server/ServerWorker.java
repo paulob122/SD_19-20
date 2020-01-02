@@ -9,6 +9,7 @@ import app.utils.Config;
 import app.utils.GeneralMessage;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.Buffer;
 import java.util.Arrays;
@@ -189,6 +190,7 @@ public class ServerWorker implements Runnable {
             out_writer.println("welcome " + parts[0] + "!");
             out_writer.flush();
 
+
         } else {
 
             out_writer.println("credentials are wrong");
@@ -280,7 +282,7 @@ public class ServerWorker implements Runnable {
 
         if (id == -1) {
 
-            this.out_writer.println("Music already exists with that title!\n");
+            this.out_writer.println("Music already exists with that title!");
             this.out_writer.flush();
 
             return;

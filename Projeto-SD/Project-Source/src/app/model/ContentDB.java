@@ -119,14 +119,17 @@ public class ContentDB {
 
             if (m.getTitle().equals(title)) {
 
+                this.lock.unlock();
+
                 return -1;
             }
         }
 
         this.lastID++;
 
-        HashSet<String> tags = new HashSet();
+        HashSet<String> tags = new HashSet<>();
         tags.add("*");
+        tags.addAll(list_of_tags);
         MetaData md = new MetaData(title, artist, year, tags);
         Music m = new Music(this.lastID, 0, md);
 
