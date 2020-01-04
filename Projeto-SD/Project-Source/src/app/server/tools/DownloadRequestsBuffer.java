@@ -141,20 +141,9 @@ public class DownloadRequestsBuffer {
 
             while (this.nextPosDownloadQueue == this.downloadQueue_MAX_SIZE) {
 
-                if (r == 1) {
-
-                    if (isBigDowload(c_id.getDownloadSize())){
-                        unlockBigDownload();}
-                    else {unlockSmallDownload();}
-                }
-
                 GeneralMessage.show(3, c_id.getUserName(), "queue is full, waiting... " + c_id.getDownloadSize(), true);
 
                 wait();
-
-                if (isBigDowload(c_id.getDownloadSize())){
-                    lockBigDownload();}
-                else {lockSmallDownload();}
 
                 r = 1;
             }
@@ -165,9 +154,19 @@ public class DownloadRequestsBuffer {
         }
         if (r == 1) {
             if (isBigDowload(c_id.getDownloadSize())) {
+                try {
+                    lockBigDownload();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 unlockBigDownload();
             }
             else {
+                try {
+                    lockSmallDownload();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 unlockSmallDownload();
             }
         }

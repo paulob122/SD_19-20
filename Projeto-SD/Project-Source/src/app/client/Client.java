@@ -106,9 +106,10 @@ public class Client {
 
         //--------------------------------------------------------------------------------------------------------------
 
-        try { init_client(); } catch (IOException e) {
-            GeneralMessage.show(0, "client", "initialization failed...", true);
-        }
+            try { init_client(); }
+            catch (IOException e) {
+                GeneralMessage.show(0, "client", "initialization failed...", true);
+            }
 
         //--------------------------------------------------------------------------------------------------------------
 
@@ -269,7 +270,15 @@ public class Client {
 
                     System.out.println("Going back to main menu...");
 
-                    logout_message();
+                    int r = logout_message();
+
+                    if (r == -1)  {
+
+                        GUI.clear_screen();
+                        GUI.main_menu();
+
+                        return;
+                    }
 
                     break;
 
@@ -327,7 +336,6 @@ public class Client {
             GUI.clear_screen();
             RUN_after_login(name);
             client_name = name;
-
         }
     }
 
@@ -427,7 +435,7 @@ public class Client {
      * Message has this format: LOGOUT\nname.
      * Also gets the answer from the server and shows it to client, after that, the method stops.
      */
-    private static void logout_message() {
+    private static int logout_message() {
 
         out_socket.println("LOGOUT\n" + client_name);
         out_socket.flush();
@@ -438,7 +446,7 @@ public class Client {
 
             if (reply_from_server.equals("logout successfull")) {
 
-                main(null);
+                return -1;
             }
 
             GeneralMessage.show(1, "server", reply_from_server, false);
@@ -447,6 +455,8 @@ public class Client {
 
             GeneralMessage.show(0, "client", "could not read server reply", false);
         }
+
+        return 0;
     }
 
     /**

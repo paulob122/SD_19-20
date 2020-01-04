@@ -74,8 +74,8 @@ public class ContentDB {
      */
     private void init_content_test() {
 
-        MetaData md1 = new MetaData("music1", "jose malhoa", 1920);
-        MetaData md2 = new MetaData("music2", "metallica", 2002);
+        MetaData md1 = new MetaData("music1", "artist1", 1920);
+        MetaData md2 = new MetaData("music2", "artist2", 2002);
 
         Music m1 = new Music(1, 0, md1);
         Music m2 = new Music(2, 1, md2);
