@@ -7,7 +7,7 @@ Group members: João Azevedo | Paulo Araújo | Pedro Machado
 Description:
 
 * The general idea behind this project is to create a client/server based application to manage content stored in the system and deal with operations like download, upload, search, register user and authenticate.
-* The Client and Server apps communicate with each other using TCP Sockets in Java. With those we transfer files from 1 end user to another and manage concurrent access to the database.
+* The Client and Server apps communicate with  each other using TCP Sockets in Java. With those we transfer files from 1 end user to another and manage concurrent access to the database.
 
 Disclaimer: 
 
